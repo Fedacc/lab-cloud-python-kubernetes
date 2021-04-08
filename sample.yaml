@@ -16,6 +16,12 @@ spec:
       - name: <INSERT_NAME>
         image: <INSER_IMAGE_REFERENCE>
         imagePullPolicy: Always
+        env:
+        - name: VARIABLE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: name-of-configmap
+              key: key-of-the-configmap
         livenessProbe:
           httpGet:
             path: /health
