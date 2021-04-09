@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  replicas: 1 # tells deployment to run X pods matching the template
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: us.icr.io/<INSERT_NAMESPACE>/<IMAGE_NAME>:<IMAGE_TAG>
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        env:
+        - name: QUERY_SERVICE
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-config
+              key: QUERY_SERVICE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  type: NodePort
+  selector:
+    app: frontend
+  ports:
+   - protocol: TCP
+     port: 8080
