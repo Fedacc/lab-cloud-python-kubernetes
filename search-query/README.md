@@ -59,3 +59,25 @@ Send the queries via POST request to the server with the following payload
     **Note**: for the moment, create the service with `NodePort` option so that it is easier to test it externally
 
 8. Deploy on Kubernetes cluster
+
+
+
+## Useful LOGIN commands
+
+1. Log in to your IBM Cloud account
+
+    ```bash
+    ibmcloud login -a cloud.ibm.com -r <REGION> -g <RESOURCE_GROUP>
+    ```
+
+2. Set the Kubernetes context to your cluster for this terminal session
+
+    ```bash
+    ibmcloud ks cluster config --cluster <CLUSTER_NAME or CLUSTER_ID>
+    ```
+
+3. Login to your Container Registry Service on IBM Cloud
+
+    ```bash
+    ibmcloud cr login
+    ```
