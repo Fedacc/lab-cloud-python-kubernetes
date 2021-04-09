@@ -37,18 +37,30 @@ def start_query():
                 natural_language_query = query
             ).get_result()
             # Manage payload of response from Discovery
+            # print(discovery_response["results"])
             results = [] # empty list that will contain the simpler response 
             for result in discovery_response["results"]:
-                answer = {
-                    "text": result["text"],
-                    "author": result["author"],
-                    "url": result["url"],
-                }
+                answer = {}
+                # print("\n==========================================\n\n\nadding result")
+                # print(result)
+                if "text" in result:
+                    answer["text"] = result["text"]
+                else:
+                    answer["text"] = None
+                if "author" in result:
+                    answer["author"] = result["author"]
+                else:
+                    answer["author"] = None
+                if "url" in result:
+                    answer["url"] = result["url"]
+                else:
+                    answer["url"] = None
                 results.append(answer)
 
             resp = Response(json.dumps({"results": results}), status=200, mimetype='application/json')
 
     except Exception as e:
+        print(e)
         json_error_resp = json.dumps({"errorMessage": str(e)})
         resp = Response(json_error_resp, status=500, mimetype='application/json')
 
