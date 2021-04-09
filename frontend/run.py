@@ -17,6 +17,11 @@ app.config["DEBUG"] = True
 def homepage():
     return app.send_static_file("index.html")
 
+# Health Check
+@app.route("/health", methods=["GET"])
+def health():
+    return {"status": "UP"}
+
 # Handle form submission
 @app.route('/startSearch', methods=['POST'])
 def start_search():
