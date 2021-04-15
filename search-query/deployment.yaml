@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query
+spec:
+  selector:
+    matchLabels:
+      app: query
+  replicas: 1 # tells deployment to run X pods matching the template
+  template:
+    metadata:
+      labels:
+        app: query
+    spec:
+      containers:
+      - name: query
+        image: us.icr.io/lab-uni/search-query:0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        ports:
+          - containerPort: 3000
+        env:
+        - name: DISCOVERY_APIKEY
+          valueFrom:
+            secretKeyRef:
+              name: query-secret
+              key: DISCOVERY_APIKEY
+        - name: DISCOVERY_URL
+          valueFrom:
+            secretKeyRef:
+              name: query-secret
+              key: DISCOVERY_URL
+        - name: DISCOVERY_COLLECTIONID
+          valueFrom:
+            secretKeyRef:
+              name: query-secret
+              key: DISCOVERY_COLLECTIONID
+        - name: DISCOVERY_ENVIRONMENTID
+          valueFrom:
+            secretKeyRef:
+              name: query-secret
+              key: DISCOVERY_ENVIRONMENTID
+        - name: DISCOVERY_VERSION
+          valueFrom:
+            secretKeyRef:
+              name: query-secret
+              key: DISCOVERY_VERSION
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query
+  labels:
+    app: query
+spec:
+  type: ClusterIP
+  selector:
+    app: query
+  ports:
+   - protocol: TCP
+     port: 3000
+     targetPort: 3000

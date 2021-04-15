@@ -66,6 +66,10 @@ def start_query():
 
     return resp
 
+# Health Check
+@app.route("/health", methods=["GET"])
+def health():
+    return {"status": "UP"}
 
 
 
